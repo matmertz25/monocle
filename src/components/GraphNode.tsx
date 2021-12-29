@@ -22,6 +22,7 @@ export default function GraphNode(props: any, handleNodeClick: any, orientation:
       >
         <div
           style={{
+            position: 'fixed',
             height: 'auto',
             width: 'auto',
             flexDirection: 'column',
