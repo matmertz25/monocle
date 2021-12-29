@@ -15,10 +15,9 @@ export default function GraphNode(props: any, handleNodeClick: any, orientation:
     <React.Fragment>
       <circle r={5} strokeWidth={1} style={{ stroke: '#d0d7de', fill: '#fff' }}></circle>
       <foreignObject
-        width={40}
-        height={1}
-        // x={orientation === 'horizontal' ? -2 : -23}
-        // y={orientation === 'horizontal' ? -23 : -2}
+        height={75}
+        x={orientation === 'horizontal' ? -2 : -23}
+        y={orientation === 'horizontal' ? -23 : -2}
         style={{ overflow: 'visible' }}
       >
         <div
