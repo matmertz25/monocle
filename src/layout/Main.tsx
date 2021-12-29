@@ -3,6 +3,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { CogIcon, HomeIcon, XIcon } from '@heroicons/react/outline'
 import Header from './Header'
 import BlockLogo from '../assets/blockLogo.png'
+import Logo from '../assets/logo.png'
 import { useLocation } from 'react-router-dom'
 import { classNames } from '../utils'
 import { Link } from 'react-router-dom'
@@ -25,7 +26,7 @@ export default function Main({ children }: { children: ReactElement }): ReactEle
           <div className="w-full py-6 flex flex-col items-center">
             <div className="flex-shrink-0 flex items-center">
               <Link to="/">
-                <img className="h-12 w-auto" src={BlockLogo} alt="Monocle" />
+                <img className="h-15 w-auto" src={BlockLogo} alt="Monocle" />
               </Link>
             </div>
             <div className="flex-1 mt-6 w-full px-2 space-y-1">
@@ -102,7 +103,7 @@ export default function Main({ children }: { children: ReactElement }): ReactEle
                   </Transition.Child>
                   <div className="flex-shrink-0 px-4 flex items-center">
                     <Link to="/">
-                      <img className="h-12 w-auto" src={BlockLogo} alt="Monocle" />
+                      <img className="h-12 w-auto" src={Logo} alt="Monocle" />
                     </Link>
                   </div>
                   <div className="mt-5 flex-1 h-0 px-2 overflow-y-auto">
