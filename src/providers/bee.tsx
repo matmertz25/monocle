@@ -24,6 +24,7 @@ interface ContextInterface {
   }>
   getChunk: (hash: Reference | string) => Promise<Data>
   getDownloadLink: (hash: Reference | string) => string
+  getFolderDownloadLink: (hash: Reference | string, path: string) => string
   download: (hash: Reference | string, entries: Record<string, string>, metadata?: any) => Promise<void>
 }
 
@@ -32,6 +33,7 @@ const initialValues: ContextInterface = {
   getMetadata: () => Promise.reject(),
   getChunk: () => Promise.reject(),
   getDownloadLink: () => '',
+  getFolderDownloadLink: () => '',
   download: () => Promise.resolve(),
 }
 
@@ -184,7 +186,15 @@ export function Provider({ children }: Props): ReactElement {
     return `${BEE_HOSTS[hashIndex]}/bzz/${hash}`
   }
 
+  const getFolderDownloadLink = (hash: Reference | string, path: string) => {
+    const hashIndex = hashToIndex(hash)
+
+    return `${BEE_HOSTS[hashIndex]}/bzz/${hash}/${path}`
+  }
+
   return (
-    <Context.Provider value={{ getMetadata, upload, getChunk, getDownloadLink, download }}>{children}</Context.Provider>
+    <Context.Provider value={{ getMetadata, upload, getChunk, getDownloadLink, getFolderDownloadLink, download }}>
+      {children}
+    </Context.Provider>
   )
 }

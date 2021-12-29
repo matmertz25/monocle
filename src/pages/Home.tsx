@@ -12,19 +12,22 @@ import TreeNavigator from '../components/TreeNavigator'
 import { useSearchParams } from 'react-router-dom'
 import ErrorAlert from '../components/ErrorAlert'
 
-const getLeaf = (key: string, node: any): any => {
+const getLeaf = (key: string, node: any, prefix = ''): any => {
   const { contentAddress, entry, forks, metadata, obfuscationKey, type } = node.node
+  const path = prefix + bytesToUtf8(node.prefix)
+  const address = contentAddress ? bytesToHex(contentAddress) : ''
 
   return {
-    key,
-    name: bytesToHex(contentAddress) || key,
-    path: bytesToUtf8(node.prefix),
+    key: `${key}-${address}`,
+    address: address || key,
+    prefix: prefix,
+    path: path,
     title: bytesToUtf8(node.prefix),
     data: entry,
     metadata,
     obfuscationKey,
     type,
-    children: forks ? Object.entries(forks).map(([key, node]) => getLeaf(key, node)) : null,
+    children: forks ? Object.entries(forks).map(([key, childNode]) => getLeaf(key, childNode, path)) : null,
     attributes: {
       ...metadata,
     },
@@ -37,7 +40,7 @@ export default function Home(): ReactElement {
   const [manifest, setManifest] = useState<any>(new MantarayNode())
   const [data, setData] = useState<any>({
     key: 'Root',
-    name: 'Root',
+    address: 'Root',
     title: 'Root',
     path: '/',
     data: undefined,
@@ -98,7 +101,7 @@ export default function Home(): ReactElement {
   useEffect(() => {
     const data = {
       key: 'Root',
-      name: manifest?.contentAddress ? bytesToUtf8(manifest.contentAddress) : 'Root',
+      address: manifest?.contentAddress ? bytesToUtf8(manifest.contentAddress) : 'Root',
       title: manifest?.contentAddress ? bytesToUtf8(manifest.contentAddress) : 'Root',
       path: '/',
       data: manifest?.entry,
@@ -186,7 +189,7 @@ export default function Home(): ReactElement {
           <div style={{ flexGrow: '1' }}>
             <Graph initialDepth={1} data={data} handleNodeClick={handleNodeClick} />
             <NodeCard
-              hash={hash}
+              hash={hash || ''}
               node={activeNode}
               manifest={manifest}
               handleManifestUpdate={handleManifestUpdate}

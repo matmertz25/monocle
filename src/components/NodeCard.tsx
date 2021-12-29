@@ -1,10 +1,10 @@
 import { MantarayNode } from 'mantaray-js'
-import { ReactElement, useEffect, useState } from 'react'
-import { shortenHash } from '../utils'
-import { beeDownloadFile, bytesToUtf8, utf8ToBytes } from '../utils/mantaray'
+import { ReactElement, useState, useContext } from 'react'
+import { utf8ToBytes } from '../utils/mantaray'
 import NodeEmpty from './NodeEmpty'
 import { PaperClipIcon } from '@heroicons/react/solid'
 import ForkForm from './ForkForm'
+import { Context } from '../providers/bee'
 
 export default function NodeCard({
   hash,
@@ -13,20 +13,15 @@ export default function NodeCard({
   handleManifestUpdate,
   setActiveNode,
 }: {
-  hash: string | undefined
+  hash: string
   node: any
   manifest: MantarayNode
   handleManifestUpdate: any
   setActiveNode: any
 }): ReactElement {
-  const [editing, setEditing] = useState(false)
-  const [entry, setEntry] = useState<any>(undefined)
+  const { download, getFolderDownloadLink } = useContext(Context)
 
-  // useEffect(() => {
-  //   if (hash && node.path) {
-  //     beeDownloadFile(hash, node.path).then(res => setEntry(res))
-  //   }
-  // }, [hash, node.path])
+  const [editing, setEditing] = useState(false)
 
   const handleToggleEdit = () => {
     setEditing(!editing)
@@ -95,7 +90,7 @@ export default function NodeCard({
               <div>
                 <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                   <div className="sm:col-span-1">
-                    <dt className="text-sm font-medium text-gray-500">Path (Prefix)</dt>
+                    <dt className="text-sm font-medium text-gray-500">Path</dt>
                     <dd className="mt-1 text-sm text-gray-900">{node.path}</dd>
                   </div>
                   <div className="sm:col-span-1">
@@ -104,7 +99,7 @@ export default function NodeCard({
                   </div>
                   <div className="sm:col-span-2">
                     <dt className="text-sm font-medium text-gray-500">Reference</dt>
-                    <dd className="mt-1 text-sm text-gray-900">{node.name}</dd>
+                    <dd className="mt-1 text-sm text-gray-900">{node.address}</dd>
                   </div>
                   <div className="sm:col-span-2">
                     <dt className="text-sm font-medium text-gray-500">Metadata</dt>
@@ -127,10 +122,15 @@ export default function NodeCard({
                         <li key={node.path} className="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
                           <div className="w-0 flex-1 flex items-center">
                             <PaperClipIcon className="flex-shrink-0 h-5 w-5 text-gray-400" aria-hidden="true" />
-                            <span className="ml-2 flex-1 w-0 truncate">{node.path}</span>
+                            <span className="ml-2 flex-1 w-0 truncate">{node.title}</span>
                           </div>
                           <div className="ml-4 flex-shrink-0">
-                            <a href={'/'} className="font-medium text-blue-600 hover:text-blue-500">
+                            <a
+                              href={getFolderDownloadLink(hash, node.path)}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="font-medium text-blue-600 hover:text-blue-500"
+                            >
                               Download
                             </a>
                           </div>
