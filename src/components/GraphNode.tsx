@@ -19,11 +19,12 @@ export default function GraphNode(props: any, handleNodeClick: any, orientation:
         height={1}
         x={orientation === 'horizontal' ? -2 : -23}
         y={orientation === 'horizontal' ? -23 : -2}
-        style={{ overflow: 'visible', height: 'auto', width: 'auto' }}
+        style={{ overflow: 'visible' }}
       >
         <div
           style={{
-            height: '100%',
+            height: 'auto',
+            width: 'auto',
             flexDirection: 'column',
             display: 'inline-flex',
             borderRadius: '6px',
