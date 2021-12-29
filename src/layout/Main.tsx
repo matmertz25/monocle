@@ -101,15 +101,17 @@ export default function Main({ children }: { children: ReactElement }): ReactEle
                     </div>
                   </Transition.Child>
                   <div className="flex-shrink-0 px-4 flex items-center">
-                    <img className="h-12 w-auto" src={BlockLogo} alt="Monocle" />
+                    <Link to="/">
+                      <img className="h-12 w-auto" src={BlockLogo} alt="Monocle" />
+                    </Link>
                   </div>
                   <div className="mt-5 flex-1 h-0 px-2 overflow-y-auto">
                     <nav className="h-full flex flex-col">
                       <div className="space-y-1">
                         {sidebarNavigation.map(item => (
-                          <a
+                          <Link
                             key={item.name}
-                            href={item.href}
+                            to={item.href}
                             className={classNames(
                               location.pathname === item.href
                                 ? 'bg-indigo-800 text-white'
@@ -128,7 +130,7 @@ export default function Main({ children }: { children: ReactElement }): ReactEle
                               aria-hidden="true"
                             />
                             <span>{item.name}</span>
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     </nav>

@@ -17,8 +17,8 @@ export default function GraphNode(props: any, handleNodeClick: any, orientation:
       <foreignObject
         width={40}
         height={1}
-        x={orientation === 'horizontal' ? -2 : -23}
-        y={orientation === 'horizontal' ? -23 : -2}
+        // x={orientation === 'horizontal' ? -2 : -23}
+        // y={orientation === 'horizontal' ? -23 : -2}
         style={{ overflow: 'visible' }}
       >
         <div
