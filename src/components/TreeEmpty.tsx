@@ -21,8 +21,9 @@ export default function TreeEmpty() {
       <p className="mt-1 text-sm text-gray-500">Provide a swarm hash to load or create a new manifest</p>
       <div className="mt-6">
         <button
+          disabled
           type="button"
-          className="inline-flex items-center px-2.5 py-1.5 border border-transparent shadow-sm text-xs font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className="disabled:opacity-75 inline-flex items-center px-2.5 py-1.5 border border-transparent shadow-sm text-xs font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
           New Manifest
