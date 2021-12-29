@@ -187,7 +187,7 @@ export default function Home(): ReactElement {
             Home
           </h1>
           <div style={{ flexGrow: '1' }}>
-            <Graph initialDepth={1} data={data} handleNodeClick={handleNodeClick} />
+            <Graph initialDepth={1} data={data} activeNode={activeNode} handleNodeClick={handleNodeClick} />
             <NodeCard
               hash={hash || ''}
               node={activeNode}

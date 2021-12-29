@@ -10,10 +10,12 @@ import { classNames } from '../utils'
 export default function Graph({
   initialDepth,
   data,
+  activeNode,
   handleNodeClick,
 }: {
   initialDepth: number
   data: any
+  activeNode: any
   handleNodeClick: any
 }): ReactElement {
   const [orientation, setOrientation] = useState<'horizontal' | 'vertical'>('horizontal')
@@ -153,13 +155,6 @@ export default function Graph({
             </Menu>
           </span>
         </div>
-        {/* <button
-          onClick={() => handleRefresh()}
-          type="button"
-          className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          <RefreshIcon className="h-4 w-4" aria-hidden="true" />
-        </button> */}
       </div>
       <Tree
         data={data}
@@ -171,12 +166,11 @@ export default function Graph({
         zoom={zoom}
         translate={{ x: translateX, y: translateY }}
         pathFunc={pathStyle}
-        // onLinkClick={handleNodeClick}
         separation={{
           siblings: orientation === 'horizontal' ? 1 : 2,
           nonSiblings: orientation === 'horizontal' ? 2 : 1,
         }}
-        renderCustomNodeElement={rd3tProps => GraphNode(rd3tProps, handleNodeClick, orientation)}
+        renderCustomNodeElement={rd3tProps => GraphNode(rd3tProps, handleNodeClick, orientation, activeNode)}
       />
     </div>
   )

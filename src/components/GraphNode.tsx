@@ -2,7 +2,12 @@ import React, { ReactElement } from 'react'
 import { PlusIcon, MinusIcon } from '@heroicons/react/solid'
 import { shortenHash } from '../utils'
 
-export default function GraphNode(props: any, handleNodeClick: any, orientation: string): ReactElement {
+export default function GraphNode(
+  props: any,
+  handleNodeClick: any,
+  orientation: string,
+  activeNode: any,
+): ReactElement {
   const { nodeDatum, toggleNode } = props
 
   const handeToggleNode = (e: any) => {
@@ -13,7 +18,11 @@ export default function GraphNode(props: any, handleNodeClick: any, orientation:
 
   return (
     <React.Fragment>
-      <circle r={5} strokeWidth={1} style={{ stroke: '#d0d7de', fill: '#fff' }}></circle>
+      <circle
+        r={5}
+        strokeWidth={activeNode.path === nodeDatum.path ? 2 : 1}
+        style={{ stroke: activeNode.path === nodeDatum.path ? '#4338ca' : '#d0d7de', fill: '#fff' }}
+      ></circle>
       <foreignObject
         height={75}
         x={orientation === 'horizontal' ? -2 : -23}
@@ -21,6 +30,9 @@ export default function GraphNode(props: any, handleNodeClick: any, orientation:
         style={{ overflow: 'visible' }}
       >
         <div
+          className={`${
+            activeNode.path === nodeDatum.path ? 'outline outline-offset-2 outline-2 outline-indigo-400' : ''
+          } shadow-lg`}
           style={{
             position: 'fixed',
             height: 'auto',
@@ -33,7 +45,6 @@ export default function GraphNode(props: any, handleNodeClick: any, orientation:
             paddingLeft: '28px',
             paddingRight: '28px',
             backgroundColor: '#fff',
-            boxShadow: 'rgba(140,149,159,0.15) 0px 3px 6px 0px',
           }}
           onClick={() => handleNodeClick(nodeDatum)}
         >
