@@ -1,7 +1,7 @@
 import { ReactElement, useContext, useEffect, useState } from 'react'
 import Graph from '../components/Graph'
 import MainLayout from '../layout/Main'
-import { bytesToHex, bytesToUtf8, loadManifest } from '../utils/mantaray'
+import { bytesToHex, bytesToUtf8 } from '../utils/mantaray'
 import { SearchIcon } from '@heroicons/react/solid'
 import NodeCard from '../components/NodeCard'
 import { MantarayNode } from 'mantaray-js'
@@ -59,28 +59,26 @@ export default function Home(): ReactElement {
       return
     }
 
-    loadManifest(hash).then(res => setManifest(res))
-
     setErrorMsg(null)
     setEntries({})
     setIsLoading(true)
-    // getMetadata(hash)
-    //   .then(({ metadata, preview, entries, node }) => {
-    //     // eslint-disable-next-line no-console
-    //     console.log(metadata, preview, entries, node)
-    //     setManifest(node)
-    //     setMetadata(metadata)
-    //     setPreview(preview)
-    //     setEntries(entries)
-    //     setIsLoading(false)
-    //   })
-    //   .catch(() => {
-    //     // There are no metadata, but maybe there is a retrievable file
-    //     getChunk(hash)
-    //       .then(d => setChunkExists(Boolean(d.byteLength)))
-    //       .catch(() => setChunkExists(false))
-    //       .finally(() => setIsLoading(false))
-    //   })
+    getMetadata(hash)
+      .then(({ metadata, preview, entries, node }) => {
+        // eslint-disable-next-line no-console
+        console.log(metadata, preview, entries, node)
+        setManifest(node)
+        setMetadata(metadata)
+        setPreview(preview)
+        setEntries(entries)
+        setIsLoading(false)
+      })
+      .catch(() => {
+        // There are no metadata, but maybe there is a retrievable file
+        getChunk(hash)
+          .then(d => setChunkExists(Boolean(d.byteLength)))
+          .catch(() => setChunkExists(false))
+          .finally(() => setIsLoading(false))
+      })
   }, [getChunk, getMetadata, hash])
 
   useEffect(() => {
@@ -144,7 +142,18 @@ export default function Home(): ReactElement {
                 </form>
               </div>
               <div className="px-5 py-4">
-                <TreeNavigator data={data} handleNodeClick={handleNodeClick} />
+                {isLoading ? (
+                  <div className="text-center mt-6">
+                    <div
+                      className=" animate-spin spinner-border inline-block w-10 h-10 border-indigo-200 border-t-indigo-400 border-4 rounded-full"
+                      role="status"
+                    >
+                      <span className="hidden">Loading...</span>
+                    </div>
+                  </div>
+                ) : (
+                  <TreeNavigator data={data} metadata={metadata} handleNodeClick={handleNodeClick} />
+                )}
               </div>
             </div>
           </div>

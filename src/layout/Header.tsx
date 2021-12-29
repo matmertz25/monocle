@@ -1,7 +1,50 @@
 import { MenuAlt2Icon, PlusSmIcon } from '@heroicons/react/outline'
 import { SearchIcon } from '@heroicons/react/solid'
+import { useContext, useEffect, useState } from 'react'
+import { Utils } from '@ethersphere/bee-js'
+import { Context } from '../providers/bee'
 
 export default function Header({ setMobileMenuOpen }: { setMobileMenuOpen: any }) {
+  const [hash, setHash] = useState<string | undefined>(undefined)
+
+  const { getMetadata, getChunk } = useContext(Context)
+  const [entries, setEntries] = useState<Record<string, string>>({})
+  const [metadata, setMetadata] = useState<any | undefined>()
+  const [preview, setPreview] = useState<string | undefined>()
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [chunkExists, setChunkExists] = useState<boolean>(false)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!(Utils.isHexString(hash, 64) || Utils.isHexString(hash, 128))) {
+      setErrorMsg('Not a valid Swarm Reference')
+      setIsLoading(false)
+
+      return
+    }
+
+    setErrorMsg(null)
+    setEntries({})
+    setIsLoading(true)
+    getMetadata(hash)
+      .then(({ metadata, preview, entries, node }) => {
+        // eslint-disable-next-line no-console
+        console.log(metadata, preview, entries, node)
+        // setManifest(node)
+        setMetadata(metadata)
+        setPreview(preview)
+        setEntries(entries)
+        setIsLoading(false)
+      })
+      .catch(() => {
+        // There are no metadata, but maybe there is a retrievable file
+        getChunk(hash)
+          .then(d => setChunkExists(Boolean(d.byteLength)))
+          .catch(() => setChunkExists(false))
+          .finally(() => setIsLoading(false))
+      })
+  }, [getChunk, getMetadata, hash])
+
   return (
     <header className="w-full">
       <div className="relative z-10 flex-shrink-0 h-16 bg-white border-b border-gray-200 shadow-sm flex">
@@ -14,7 +57,7 @@ export default function Header({ setMobileMenuOpen }: { setMobileMenuOpen: any }
           <MenuAlt2Icon className="h-6 w-6" aria-hidden="true" />
         </button>
         <div className="flex-1 flex justify-between px-4 sm:px-6">
-          <div className="flex-1 flex">
+          <div className="lg:invisible flex-1 flex">
             <form className="w-full flex md:ml-0" action="#" method="GET">
               <label htmlFor="search-field" className="sr-only">
                 Search all files
@@ -29,6 +72,7 @@ export default function Header({ setMobileMenuOpen }: { setMobileMenuOpen: any }
                   className="h-full w-full border-transparent py-2 pl-8 pr-3 text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-0 focus:border-transparent focus:placeholder-gray-400"
                   placeholder="Search"
                   type="search"
+                  onChange={e => setHash(e.target.value)}
                 />
               </div>
             </form>

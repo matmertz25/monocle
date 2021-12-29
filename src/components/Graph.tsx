@@ -17,7 +17,7 @@ export default function Graph({
   handleNodeClick: any
 }): ReactElement {
   const [orientation, setOrientation] = useState<'horizontal' | 'vertical'>('horizontal')
-  const [pathStyle, setPathStyle] = useState<'diagonal' | 'step'>('diagonal')
+  const [pathStyle, setPathStyle] = useState<'diagonal' | 'step' | 'straight'>('diagonal')
   const [translateX, setTranslateX] = useState<number>(200)
   const [translateY, setTranslateY] = useState<number>(300)
   const [zoom, setZoom] = useState<number>(1)
@@ -115,30 +115,37 @@ export default function Graph({
                       Path Style
                     </h3>
                     <Menu.Item key="diagonal">
-                      {({ active }) => (
-                        <div
-                          onClick={() => setPathStyle('diagonal')}
-                          className={classNames(
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                            'block px-4 py-2 text-sm',
-                          )}
-                        >
-                          <span className="truncate">Diagonal</span>
-                        </div>
-                      )}
+                      <div
+                        onClick={() => setPathStyle('diagonal')}
+                        className={classNames(
+                          pathStyle === 'diagonal' ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                          'block px-4 py-2 text-sm cursor-pointer',
+                        )}
+                      >
+                        <span className="truncate">Diagonal</span>
+                      </div>
                     </Menu.Item>
                     <Menu.Item key="step">
-                      {({ active }) => (
-                        <div
-                          onClick={() => setPathStyle('step')}
-                          className={classNames(
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                            'block px-4 py-2 text-sm',
-                          )}
-                        >
-                          <span className="truncate">Step</span>
-                        </div>
-                      )}
+                      <div
+                        onClick={() => setPathStyle('step')}
+                        className={classNames(
+                          pathStyle === 'step' ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                          'block px-4 py-2 text-sm cursor-pointer',
+                        )}
+                      >
+                        <span className="truncate">Step</span>
+                      </div>
+                    </Menu.Item>
+                    <Menu.Item key="straight">
+                      <div
+                        onClick={() => setPathStyle('straight')}
+                        className={classNames(
+                          pathStyle === 'straight' ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                          'block px-4 py-2 text-sm cursor-pointer',
+                        )}
+                      >
+                        <span className="truncate">Straight</span>
+                      </div>
                     </Menu.Item>
                   </div>
                 </Menu.Items>

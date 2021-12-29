@@ -1,4 +1,4 @@
-import { initManifestNode, Utils as MantaUtils, MantarayNode, Reference, loadAllNodes } from 'mantaray-js'
+import { initManifestNode, Utils as MantaUtils, Reference } from 'mantaray-js'
 import { Bee, Utils } from '@ethersphere/bee-js'
 import { BEE_HOSTS } from '../constants'
 
@@ -73,14 +73,3 @@ export const loadFunction = async (address: any): Promise<Uint8Array> => {
 
 //   return bee.downloadData(contentHash.toString()) //only download its manifest
 // }
-
-export const loadManifest = async (reference: string): Promise<any> => {
-  const data: any = await beeDownload(reference)
-  const node = new MantarayNode()
-  node.deserialize(data)
-  await loadAllNodes(loadFunction, node)
-  // eslint-disable-next-line no-console
-  console.log(node)
-
-  return node
-}
