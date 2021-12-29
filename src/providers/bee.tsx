@@ -12,7 +12,14 @@ import { MantarayNode } from 'mantaray-js'
 import { loadFunction } from '../utils/mantaray'
 
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
-const randomBee = new Bee(BEE_HOSTS[randomIndex])
+
+const getBee = (hashIndex?: number): Bee => {
+  const localBeeUrl = localStorage.getItem('beeUrl')
+  const hostedBeeUrl = hashIndex ? BEE_HOSTS[hashIndex] : BEE_HOSTS[randomIndex]
+  const url = localBeeUrl || hostedBeeUrl
+
+  return new Bee(url)
+}
 
 interface ContextInterface {
   upload: (files: any[], metadata: any, preview?: Blob) => Promise<Reference>
@@ -79,11 +86,12 @@ export function Provider({ children }: Props): ReactElement {
       fls.push(previewFile)
     }
 
-    const { reference } = await randomBee.uploadFiles(POSTAGE_STAMP, fls, { indexDocument })
+    const bee = getBee()
+    const { reference } = await bee.uploadFiles(POSTAGE_STAMP, fls, { indexDocument })
     const hashIndex = hashToIndex(reference)
 
     if (hashIndex !== randomIndex) {
-      const bee = new Bee(BEE_HOSTS[hashIndex])
+      const bee = getBee(hashIndex)
       await bee.uploadFiles(POSTAGE_STAMP, fls, { indexDocument })
     }
 
@@ -92,7 +100,7 @@ export function Provider({ children }: Props): ReactElement {
 
   const download = async (hash: Reference | string, entries: Record<string, string>, metadata?: any) => {
     const hashIndex = hashToIndex(hash)
-    const bee = new Bee(BEE_HOSTS[hashIndex])
+    const bee = getBee(hashIndex)
 
     if (Object.keys(entries).length <= 1) {
       window.open(getDownloadLink(hash), '_blank')
@@ -120,7 +128,7 @@ export function Provider({ children }: Props): ReactElement {
     let node
 
     const hashIndex = hashToIndex(hash)
-    const bee = new Bee(BEE_HOSTS[hashIndex])
+    const bee = getBee(hashIndex)
 
     try {
       const mtdt = await bee.downloadFile(hash, META_FILE_NAME)

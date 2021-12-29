@@ -24,6 +24,7 @@ export default function Settings() {
                   id="project-name"
                   className="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"
                   defaultValue="https://bee-1.gateway.ethswarm.org"
+                  onChange={e => localStorage.setItem('beeUrl', e.target.value)}
                 />
               </div>
             </div>
