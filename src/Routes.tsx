@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react'
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import Error404 from './pages/404'
 
 // pages
 import Home from './pages/Home'
@@ -14,7 +15,7 @@ const BaseRouter = (): ReactElement => (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/settings" element={<Settings />} />
-      {/* <Route path="*" component={Page404} /> */}
+      <Route path="*" element={<Error404 />} />
     </Routes>
   </BrowserRouter>
 )

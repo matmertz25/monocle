@@ -69,7 +69,7 @@ export default function GraphNode(props: any, handleNodeClick: any, orientation:
                 margin: 0,
               }}
             >
-              {shortenHash(nodeDatum.name)}
+              {nodeDatum.name?.length < 10 ? nodeDatum.name : shortenHash(nodeDatum.name)}
               {/* {nodeDatum.attributes &&
                 Object.entries(nodeDatum.attributes).map(([key, value]) => (
                   <li key={key}>

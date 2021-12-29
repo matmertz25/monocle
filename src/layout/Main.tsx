@@ -24,7 +24,9 @@ export default function Main({ children }: { children: ReactElement }): ReactEle
         <div className="hidden w-28 bg-indigo-700 overflow-y-auto md:block">
           <div className="w-full py-6 flex flex-col items-center">
             <div className="flex-shrink-0 flex items-center">
-              <img className="h-12 w-auto" src={BlockLogo} alt="Monocle" />
+              <Link to="/">
+                <img className="h-12 w-auto" src={BlockLogo} alt="Monocle" />
+              </Link>
             </div>
             <div className="flex-1 mt-6 w-full px-2 space-y-1">
               {sidebarNavigation.map(item => (

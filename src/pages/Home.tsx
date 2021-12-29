@@ -9,6 +9,8 @@ import { Utils } from '@ethersphere/bee-js'
 import _ from 'lodash'
 import { Context } from '../providers/bee'
 import TreeNavigator from '../components/TreeNavigator'
+import { useSearchParams } from 'react-router-dom'
+import ErrorAlert from '../components/ErrorAlert'
 
 const getLeaf = (key: string, node: any): any => {
   const { contentAddress, entry, forks, metadata, obfuscationKey, type } = node.node
@@ -30,6 +32,8 @@ const getLeaf = (key: string, node: any): any => {
 }
 
 export default function Home(): ReactElement {
+  const [searchParams, setSearchParams] = useSearchParams()
+
   const [manifest, setManifest] = useState<any>(new MantarayNode())
   const [data, setData] = useState<any>({
     key: 'Root',
@@ -53,7 +57,9 @@ export default function Home(): ReactElement {
   // 8f56d76a4c61980232f36bbeb37d908cad80c0184b0fbab2fd75035aed2bd3cf
   useEffect(() => {
     if (!(Utils.isHexString(hash, 64) || Utils.isHexString(hash, 128))) {
-      setErrorMsg('Not a valid Swarm Reference')
+      if (hash) {
+        setErrorMsg('Not a valid Swarm Reference')
+      }
       setIsLoading(false)
 
       return
@@ -80,6 +86,14 @@ export default function Home(): ReactElement {
           .finally(() => setIsLoading(false))
       })
   }, [getChunk, getMetadata, hash])
+
+  useEffect(() => {
+    const hash = searchParams.get('hash')
+
+    if (hash) {
+      setHash(hash)
+    }
+  }, [searchParams])
 
   useEffect(() => {
     const data = {
@@ -152,7 +166,10 @@ export default function Home(): ReactElement {
                     </div>
                   </div>
                 ) : (
-                  <TreeNavigator data={data} metadata={metadata} handleNodeClick={handleNodeClick} />
+                  <div>
+                    {errorMsg && <ErrorAlert messages={[errorMsg]} />}
+                    <TreeNavigator data={data} metadata={metadata} handleNodeClick={handleNodeClick} />
+                  </div>
                 )}
               </div>
             </div>
