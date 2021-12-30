@@ -6,8 +6,7 @@ const beeUrl = BEE_HOSTS[0]
 const bee = new Bee(beeUrl)
 export const createMantaray = (): any => {
   const node = initManifestNode()
-  // eslint-disable-next-line prettier/prettier
-    const address1 = MantaUtils.gen32Bytes() // instead of `gen32Bytes` some 32 bytes identifier that later could be retrieved from the storage
+  const address1 = MantaUtils.gen32Bytes() // instead of `gen32Bytes` some 32 bytes identifier that later could be retrieved from the storage
   const address2 = MantaUtils.gen32Bytes()
   const address3 = MantaUtils.gen32Bytes()
   const address4 = MantaUtils.gen32Bytes()
@@ -64,12 +63,3 @@ export const removeFork = async (address: string): Promise<Uint8Array> => {
 export const loadFunction = async (address: any): Promise<Uint8Array> => {
   return await bee.downloadData(bytesToHex(address))
 }
-
-// export const saveDirectoryFunction = async (): Promise<Uint8Array> => {
-//   const contentHash = await bee.uploadFilesFromDirectory(process.env.BEE_POSTAGE || '', (__dirname + '/testpage')), {
-//     pin: true,
-//     indexDocument: 'index.html',
-//   })
-
-//   return bee.downloadData(contentHash.toString()) //only download its manifest
-// }
