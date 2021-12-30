@@ -1,7 +1,15 @@
 import { ReactElement, useState } from 'react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/solid'
 
-export default function ForkForm({ node, handleAddFork }: { node: any; handleAddFork: any }): ReactElement {
+export default function ForkForm({
+  node,
+  prefixPath,
+  handleAddFork,
+}: {
+  node: any
+  prefixPath: string
+  handleAddFork: any
+}): ReactElement {
   const [attributeCount, setAttributeCount] = useState(node.attributes?.length || 1)
   const [prefix, setPrefix] = useState(node.path || '')
 
@@ -127,7 +135,11 @@ export default function ForkForm({ node, handleAddFork }: { node: any; handleAdd
             <div className="sm:col-span-6">
               <button
                 onClick={() =>
-                  handleAddFork({ path: prefix, entry: new Uint8Array(32), metadata: { test: 'testvalue' } })
+                  handleAddFork({
+                    path: prefixPath + prefix,
+                    entry: new Uint8Array(32),
+                    metadata: { test: 'testvalue' },
+                  })
                 }
                 type="button"
                 className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

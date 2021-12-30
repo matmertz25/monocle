@@ -36,6 +36,7 @@ export default function NodeCard({
     const bytesPath = utf8ToBytes(path)
     manifest.addFork(bytesPath, entry, metadata)
     handleManifestUpdate(manifest)
+    handleToggleCreate()
     // manifest.save(saveFunction)
   }
 
@@ -82,7 +83,11 @@ export default function NodeCard({
           </div>
           <div className="px-5 pt-4 pb-6 border-b border-gray-200 sm:px-6">
             {creating || editing ? (
-              <ForkForm node={creating ? { attributes: {} } : node} handleAddFork={handleAddFork} />
+              <ForkForm
+                node={creating ? { attributes: {} } : node}
+                prefixPath={node.path}
+                handleAddFork={handleAddFork}
+              />
             ) : (
               <div>
                 <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
