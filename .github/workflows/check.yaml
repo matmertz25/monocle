@@ -30,35 +30,35 @@ jobs:
 
       ## Try getting the node modules from cache, if failed npm ci
       - uses: actions/cache@v2
-        id: cache-npm
+        id: cache-yarn
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-${{ matrix.node }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ matrix.node }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.OS }}-node-${{ matrix.node-version }}-${{ env.cache-name }}-
             ${{ runner.OS }}-node-${{ matrix.node-version }}-
 
-      - name: Install npm deps
-        if: steps.cache-npm.outputs.cache-hit != 'true'
-        run: npm ci
+      - name: Install yarn deps
+        if: steps.cache-yarn.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
 
       - name: Commit linting
         uses: wagoid/commitlint-github-action@v2
 
       - name: Code linting
-        run: npm run lint:check
+        run: yarn run lint:check
         env:
           CI: true
 
       - name: Dependency check
-        run: npm run depcheck
+        run: yarn run depcheck
 
       - name: Update supported Bee action
         uses: ethersphere/update-supported-bee-action@v1
         if: github.ref == 'refs/heads/main'
 
       - name: Build
-        run: npm run build
+        run: yarn run build
 
       - name: Create preview
         uses: ethersphere/beeload-action@v1
