@@ -1,6 +1,6 @@
 import { MantarayNode } from 'mantaray-js'
 import { ReactElement, useState, useContext } from 'react'
-import { utf8ToBytes } from '../utils/mantaray'
+import { saveFunction, utf8ToBytes } from '../utils/mantaray'
 import NodeEmpty from './NodeEmpty'
 import { PaperClipIcon } from '@heroicons/react/solid'
 import ForkForm from './ForkForm'
@@ -22,14 +22,21 @@ export default function NodeCard({
   const { download, getFolderDownloadLink } = useContext(Context)
 
   const [editing, setEditing] = useState(false)
+  const [creating, setCreating] = useState(false)
+
+  const handleToggleCreate = () => {
+    setCreating(!creating)
+  }
 
   const handleToggleEdit = () => {
     setEditing(!editing)
   }
 
-  const handleAddFork = ({ path, entry, metadata }: { path: Uint8Array; entry: any; metadata: any }) => {
-    manifest.addFork(path, entry, metadata)
+  const handleAddFork = ({ path, entry, metadata }: { path: string; entry: any; metadata: any }) => {
+    const bytesPath = utf8ToBytes(path)
+    manifest.addFork(bytesPath, entry, metadata)
     handleManifestUpdate(manifest)
+    // manifest.save(saveFunction)
   }
 
   const handleRemoveFork = (path: string) => {
@@ -57,17 +64,7 @@ export default function NodeCard({
                   Delete
                 </button>
                 <button
-                  // onClick={() =>
-                  //   handleAddFork({
-                  //     path: utf8ToBytes('hello/text.html'),
-                  //     entry: new Uint8Array(32),
-                  //     metadata: {
-                  //       'Content-Type': 'text/html; charset=utf-8',
-                  //       Filename: 'test.html',
-                  //     },
-                  //   })
-                  // }
-                  onClick={handleToggleEdit}
+                  onClick={handleToggleCreate}
                   type="button"
                   className="mr-3 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
@@ -84,8 +81,8 @@ export default function NodeCard({
             </div>
           </div>
           <div className="px-5 pt-4 pb-6 border-b border-gray-200 sm:px-6">
-            {editing ? (
-              <ForkForm node={node} />
+            {creating || editing ? (
+              <ForkForm node={creating ? { attributes: {} } : node} handleAddFork={handleAddFork} />
             ) : (
               <div>
                 <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">

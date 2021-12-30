@@ -18,7 +18,7 @@ export default function Graph({
   activeNode: any
   handleNodeClick: any
 }): ReactElement {
-  const [orientation, setOrientation] = useState<'horizontal' | 'vertical'>('horizontal')
+  const [orientation, setOrientation] = useState<'horizontal' | 'vertical'>('vertical')
   const [pathStyle, setPathStyle] = useState<'diagonal' | 'step' | 'straight'>('diagonal')
   const [translateX, setTranslateX] = useState<number>(200)
   const [translateY, setTranslateY] = useState<number>(300)

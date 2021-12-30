@@ -1,15 +1,18 @@
-import { ReactElement } from 'react'
+import { ReactElement, useState } from 'react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/solid'
 
-export default function ForkForm({ node }: { node: any }): ReactElement {
+export default function ForkForm({ node, handleAddFork }: { node: any; handleAddFork: any }): ReactElement {
+  const [attributeCount, setAttributeCount] = useState(node.attributes?.length || 1)
+  const [prefix, setPrefix] = useState(node.path || '')
+
   return (
-    <div>
+    <div className="pb-6">
       <div className="space-y-8 divide-y divide-gray-200">
         <div>
           <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
             <div className="sm:col-span-4">
               <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                Path (Prefix)
+                Prefix
               </label>
               <div className="mt-1">
                 <input
@@ -17,7 +20,8 @@ export default function ForkForm({ node }: { node: any }): ReactElement {
                   name="path"
                   id="path"
                   autoComplete="given-name"
-                  defaultValue={node.path}
+                  value={prefix}
+                  onChange={e => setPrefix(e.target.value)}
                   className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                 />
               </div>
@@ -31,10 +35,10 @@ export default function ForkForm({ node }: { node: any }): ReactElement {
             {node?.attributes &&
               Object.entries(node.attributes).map(([key, value]: [key: string, value: any], idx) => (
                 <>
-                  <div className="sm:col-span-6 flex">
+                  <div className="sm:col-span-6 flex -mt-1">
                     <div>
                       {idx === 0 && (
-                        <label htmlFor="first-name" className="mb-1 block text-sm font-medium text-gray-700">
+                        <label htmlFor="first-name" className="mb-1 block text-sm font-medium text-gray-500">
                           Key
                         </label>
                       )}
@@ -49,7 +53,7 @@ export default function ForkForm({ node }: { node: any }): ReactElement {
                     </div>
                     <div className="ml-3">
                       {idx === 0 && (
-                        <label htmlFor="first-name" className="mb-1 block text-sm font-medium text-gray-700">
+                        <label htmlFor="first-name" className="mb-1 block text-sm font-medium text-gray-500">
                           Value
                         </label>
                       )}
@@ -65,7 +69,7 @@ export default function ForkForm({ node }: { node: any }): ReactElement {
                     <div className={idx === 1 ? 'mt-1' : 'mt-7'}>
                       <button
                         type="button"
-                        className="inline-block align-middle ml-3 items-center p-1 border border-transparent rounded-full shadow-sm text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                        className="inline-block align-middle ml-3 items-center p-1 border-transparent rounded-full shadow-sm text-red-700 border-2 border-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                       >
                         <MinusIcon className="h-5 w-5" aria-hidden="true" />
                       </button>
@@ -119,6 +123,17 @@ export default function ForkForm({ node }: { node: any }): ReactElement {
                   <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                 </div>
               </div>
+            </div>
+            <div className="sm:col-span-6">
+              <button
+                onClick={() =>
+                  handleAddFork({ path: prefix, entry: new Uint8Array(32), metadata: { test: 'testvalue' } })
+                }
+                type="button"
+                className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Save
+              </button>
             </div>
           </div>
         </div>
