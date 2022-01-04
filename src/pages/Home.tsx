@@ -40,7 +40,7 @@ export default function Home(): ReactElement {
   const [manifest, setManifest] = useState<any>(new MantarayNode())
   const [data, setData] = useState<any>({
     key: 'Root',
-    address: 'Root',
+    address: '/',
     title: 'Root',
     path: '/',
     data: undefined,
@@ -101,7 +101,7 @@ export default function Home(): ReactElement {
   useEffect(() => {
     const data = {
       key: 'Root',
-      address: manifest?.contentAddress ? bytesToUtf8(manifest.contentAddress) : 'Root',
+      address: manifest?.contentAddress ? bytesToUtf8(manifest.contentAddress) : '/',
       title: manifest?.contentAddress ? bytesToUtf8(manifest.contentAddress) : 'Root',
       path: '/',
       data: manifest?.entry,

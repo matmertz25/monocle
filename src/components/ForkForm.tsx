@@ -5,13 +5,20 @@ export default function ForkForm({
   node,
   prefixPath,
   handleAddFork,
+  handleToggleCreate,
+  handleToggleEdit,
 }: {
   node: any
   prefixPath: string
   handleAddFork: any
+  handleToggleCreate: any
+  handleToggleEdit: any
 }): ReactElement {
   const [attributeCount, setAttributeCount] = useState(node.attributes?.length || 1)
   const [prefix, setPrefix] = useState(node.path || '')
+  const [attributes, setAttributes] = useState<[string, string][]>(
+    node.attributes && node.path ? Object.entries(node.attributes) : [['', '']],
+  )
 
   return (
     <div className="pb-6">
@@ -41,7 +48,7 @@ export default function ForkForm({
               </label>
             </div>
             {node?.attributes &&
-              Object.entries(node.attributes).map(([key, value]: [key: string, value: any], idx) => (
+              attributes.map(([key, value]: [key: string, value: string], idx) => (
                 <>
                   <div className="sm:col-span-6 flex -mt-1">
                     <div>
@@ -76,6 +83,7 @@ export default function ForkForm({
                     </div>
                     <div className={idx === 1 ? 'mt-1' : 'mt-7'}>
                       <button
+                        onClick={() => setAttributes(attributes.splice(idx, 1))}
                         type="button"
                         className="inline-block align-middle ml-3 items-center p-1 border-transparent rounded-full shadow-sm text-red-700 border-2 border-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                       >
@@ -83,10 +91,10 @@ export default function ForkForm({
                       </button>
                     </div>
                   </div>
-                  {idx === Object.entries(node.attributes).length - 1 && (
+                  {idx === attributes.length - 1 && (
                     <div className="sm:col-span-6">
                       <button
-                        // onClick={() => handleAddFork()}
+                        onClick={() => setAttributes([...attributes, ['', '']])}
                         type="button"
                         className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       >
@@ -134,11 +142,18 @@ export default function ForkForm({
             </div>
             <div className="sm:col-span-6">
               <button
+                onClick={() => (prefix ? handleToggleEdit(false) : handleToggleCreate(false))}
+                type="button"
+                className="mr-3 inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Cancel
+              </button>
+              <button
                 onClick={() =>
                   handleAddFork({
                     path: prefixPath + prefix,
                     entry: new Uint8Array(32),
-                    metadata: { test: 'testvalue' },
+                    metadata: Object.fromEntries(new Map(attributes)),
                   })
                 }
                 type="button"

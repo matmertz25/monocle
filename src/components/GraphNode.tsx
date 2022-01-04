@@ -68,7 +68,7 @@ export default function GraphNode(
                   )}
                 </button>
               )}
-              {nodeDatum.path}
+              {nodeDatum.title}
             </div>
             <ul
               style={{

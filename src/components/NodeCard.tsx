@@ -5,6 +5,7 @@ import NodeEmpty from './NodeEmpty'
 import { PaperClipIcon } from '@heroicons/react/solid'
 import ForkForm from './ForkForm'
 import { Context } from '../providers/bee'
+import NodeDropdown from './NodeDropdown'
 
 export default function NodeCard({
   hash,
@@ -57,27 +58,12 @@ export default function NodeCard({
                 <h3 className="text-lg leading-6 font-medium text-gray-900 mb-0">Node</h3>
               </div>
               <div className="ml-4 mt-4 flex-shrink-0">
-                <button
-                  onClick={() => handleRemoveFork(node.path)}
-                  type="button"
-                  className="mr-3 inline-flex items-center justify-center px-2.5 py-1.5 border border-transparent  text-xs font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={handleToggleCreate}
-                  type="button"
-                  className="mr-3 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  Add Fork
-                </button>
-                <button
-                  onClick={handleToggleEdit}
-                  type="button"
-                  className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  {editing ? 'Save' : 'Edit'}
-                </button>
+                <NodeDropdown
+                  node={node}
+                  handleRemoveFork={handleRemoveFork}
+                  handleToggleCreate={handleToggleCreate}
+                  handleToggleEdit={handleToggleEdit}
+                />
               </div>
             </div>
           </div>
@@ -87,6 +73,8 @@ export default function NodeCard({
                 node={creating ? { attributes: {} } : node}
                 prefixPath={node.path}
                 handleAddFork={handleAddFork}
+                handleToggleCreate={handleToggleCreate}
+                handleToggleEdit={handleToggleEdit}
               />
             ) : (
               <div>
