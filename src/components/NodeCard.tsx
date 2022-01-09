@@ -1,8 +1,8 @@
 import { MantarayNode } from 'mantaray-js'
 import { ReactElement, useState, useContext } from 'react'
-import { saveFunction, utf8ToBytes } from '../utils/mantaray'
+import { getNodeTypes, isEdgeTypeNode, isValueTypeNode, saveFunction, utf8ToBytes } from '../utils/mantaray'
 import NodeEmpty from './NodeEmpty'
-import { PaperClipIcon } from '@heroicons/react/solid'
+import { ExternalLinkIcon, PaperClipIcon } from '@heroicons/react/solid'
 import ForkForm from './ForkForm'
 import { Context } from '../providers/bee'
 import NodeDropdown from './NodeDropdown'
@@ -80,19 +80,42 @@ export default function NodeCard({
               <div>
                 <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                   <div className="sm:col-span-1">
-                    <dt className="text-sm font-medium text-gray-500">Path</dt>
+                    <dt className="text-sm font-medium text-gray-600">Path</dt>
                     <dd className="mt-1 text-sm text-gray-900">{node.path}</dd>
                   </div>
                   <div className="sm:col-span-1">
-                    <dt className="text-sm font-medium text-gray-500">Type</dt>
-                    <dd className="mt-1 text-sm text-gray-900">{node.type}</dd>
+                    <dt className="text-sm font-medium text-gray-600">Type</dt>
+                    <dd className="mt-1 text-sm text-gray-900">
+                      <span className="mr-2">{node.type}</span>
+                      {getNodeTypes(node.type).map(type => (
+                        <span
+                          key={type}
+                          className="mx-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
+                        >
+                          {type}
+                        </span>
+                      ))}
+                    </dd>
                   </div>
                   <div className="sm:col-span-2">
-                    <dt className="text-sm font-medium text-gray-500">Reference</dt>
-                    <dd className="mt-1 text-sm text-gray-900">{node.address}</dd>
+                    <dt className="text-sm font-medium text-gray-600">Reference</dt>
+                    <dd className="mt-1 text-sm text-gray-900">
+                      {isEdgeTypeNode(node.type) ? (
+                        <a
+                          href={`/?hash=${node.address}`}
+                          target="_blank"
+                          className="font-medium text-blue-600 hover:text-blue-500"
+                          rel="noreferrer"
+                        >
+                          {node.address}
+                        </a>
+                      ) : (
+                        node.address
+                      )}
+                    </dd>
                   </div>
                   <div className="sm:col-span-2">
-                    <dt className="text-sm font-medium text-gray-500">Metadata</dt>
+                    <dt className="text-sm font-medium text-gray-600">Metadata</dt>
                     <div className="mt-5 border-t border-gray-200">
                       <dl className="sm:divide-y sm:divide-gray-200">
                         {node?.attributes &&
@@ -105,29 +128,42 @@ export default function NodeCard({
                       </dl>
                     </div>
                   </div>
-                  <div className="sm:col-span-2">
-                    <dt className="text-sm font-medium text-gray-500">Attachments</dt>
-                    <dd className="mt-1 text-sm text-gray-900">
-                      <ul className="border border-gray-200 rounded-md divide-y divide-gray-200">
-                        <li key={node.path} className="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
-                          <div className="w-0 flex-1 flex items-center">
-                            <PaperClipIcon className="flex-shrink-0 h-5 w-5 text-gray-400" aria-hidden="true" />
-                            <span className="ml-2 flex-1 w-0 truncate">{node.title}</span>
-                          </div>
-                          <div className="ml-4 flex-shrink-0">
-                            <a
-                              href={getFolderDownloadLink(hash, node.path)}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="font-medium text-blue-600 hover:text-blue-500"
-                            >
-                              Download
-                            </a>
-                          </div>
-                        </li>
-                      </ul>
-                    </dd>
-                  </div>
+                  {isValueTypeNode(node.type) && (
+                    <div className="sm:col-span-2">
+                      <dt className="text-sm font-medium text-gray-600">Entry</dt>
+                      <dd className="mt-1 text-sm text-gray-900">
+                        <ul className="border border-gray-200 rounded-md divide-y divide-gray-200">
+                          <li key={node.path} className="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
+                            <div className="w-0 flex-1 flex items-center">
+                              <PaperClipIcon className="flex-shrink-0 h-5 w-5 text-gray-400" aria-hidden="true" />
+                              <span className="ml-2 flex-1 w-0 truncate">{node.title}</span>
+                            </div>
+                            <div className="ml-4 flex-shrink-0">
+                              <a
+                                href={getFolderDownloadLink(hash, node.path)}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="flex font-medium text-blue-600 hover:text-blue-500"
+                              >
+                                <span>Open</span>
+                                <ExternalLinkIcon className="h-5 w-5 ml-1" />
+                              </a>
+                            </div>
+                            {/* <div className="ml-4 flex-shrink-0">
+                              <a
+                                href={getFolderDownloadLink(hash, node.path)}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="font-medium text-blue-600 hover:text-blue-500"
+                              >
+                                Download
+                              </a>
+                            </div> */}
+                          </li>
+                        </ul>
+                      </dd>
+                    </div>
+                  )}
                 </dl>
               </div>
             )}

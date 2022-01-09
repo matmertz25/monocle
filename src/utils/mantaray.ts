@@ -1,4 +1,4 @@
-import { initManifestNode, Utils as MantaUtils, Reference } from 'mantaray-js'
+import { initManifestNode, Utils as MantaUtils, Reference, NodeType } from 'mantaray-js'
 import { Bee, Utils } from '@ethersphere/bee-js'
 import { BEE_HOSTS } from '../constants'
 
@@ -24,6 +24,44 @@ export const createMantaray = (): any => {
   // node.removePath(path3)
 
   return node
+}
+
+export const isValueTypeNode = (type: number) => {
+  const typeMask = type & NodeType.value
+
+  return typeMask === NodeType.value
+}
+
+export const isEdgeTypeNode = (type: number) => {
+  const typeMask = type & NodeType.edge
+
+  return typeMask === NodeType.edge
+}
+
+export const isWithPathSeparatorTypeNode = (type: number) => {
+  const typeMask = type & NodeType.withPathSeparator
+
+  return typeMask === NodeType.withPathSeparator
+}
+
+export const isWithMetadataTypeNode = (type: number) => {
+  const typeMask = type & NodeType.withMetadata
+
+  return typeMask === NodeType.withMetadata
+}
+
+export const getNodeTypes = (type: number) => {
+  const nodeTypes: string[] = []
+
+  if (isValueTypeNode(type)) nodeTypes.push('value')
+
+  if (isEdgeTypeNode(type)) nodeTypes.push('edge')
+
+  if (isWithPathSeparatorTypeNode(type)) nodeTypes.push('withPathSeparator')
+
+  if (isWithMetadataTypeNode(type)) nodeTypes.push('withMetadata')
+
+  return nodeTypes
 }
 
 export const hexToBytes = (hexString: any): any => {

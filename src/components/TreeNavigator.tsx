@@ -17,6 +17,11 @@ export default function TreeNavigator({
     handleNodeClick(info.node)
   }
 
+  const handleExpand = (e: any) => {
+    // eslint-disable-next-line no-console
+    console.log(e)
+  }
+
   return (
     <div>
       {data.children ? (
@@ -32,6 +37,7 @@ export default function TreeNavigator({
             defaultExpandedKeys={['Root']}
             onSelect={onSelect}
             treeData={[data]}
+            onExpand={handleExpand}
           />
         </>
       ) : (

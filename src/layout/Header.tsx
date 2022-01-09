@@ -1,49 +1,25 @@
 import { MenuAlt2Icon, PlusSmIcon } from '@heroicons/react/outline'
 import { SearchIcon } from '@heroicons/react/solid'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Utils } from '@ethersphere/bee-js'
-import { Context } from '../providers/bee'
+import { useSearchParams } from 'react-router-dom'
 
 export default function Header({ setMobileMenuOpen }: { setMobileMenuOpen: any }) {
   const [hash, setHash] = useState<string | undefined>(undefined)
+  const [searchParams, setSearchParams] = useSearchParams()
 
-  const { getMetadata, getChunk } = useContext(Context)
-  const [entries, setEntries] = useState<Record<string, string>>({})
-  const [metadata, setMetadata] = useState<any | undefined>()
-  const [preview, setPreview] = useState<string | undefined>()
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [chunkExists, setChunkExists] = useState<boolean>(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
   useEffect(() => {
     if (!(Utils.isHexString(hash, 64) || Utils.isHexString(hash, 128))) {
       setErrorMsg('Not a valid Swarm Reference')
-      setIsLoading(false)
 
       return
     }
 
     setErrorMsg(null)
-    setEntries({})
-    setIsLoading(true)
-    getMetadata(hash)
-      .then(({ metadata, preview, entries, node }) => {
-        // eslint-disable-next-line no-console
-        console.log(metadata, preview, entries, node)
-        // setManifest(node)
-        setMetadata(metadata)
-        setPreview(preview)
-        setEntries(entries)
-        setIsLoading(false)
-      })
-      .catch(() => {
-        // There are no metadata, but maybe there is a retrievable file
-        getChunk(hash)
-          .then(d => setChunkExists(Boolean(d.byteLength)))
-          .catch(() => setChunkExists(false))
-          .finally(() => setIsLoading(false))
-      })
-  }, [getChunk, getMetadata, hash])
+    setSearchParams({ hash })
+  }, [hash, setSearchParams])
 
   return (
     <header className="w-full">
