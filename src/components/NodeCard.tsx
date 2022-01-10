@@ -6,6 +6,7 @@ import { ExternalLinkIcon, PaperClipIcon } from '@heroicons/react/solid'
 import ForkForm from './ForkForm'
 import { Context } from '../providers/bee'
 import NodeDropdown from './NodeDropdown'
+import ClipboardCopy from './ClipboardCopy'
 
 export default function NodeCard({
   hash,
@@ -110,7 +111,12 @@ export default function NodeCard({
                           {node.address}
                         </a>
                       ) : (
-                        node.address
+                        <div className="table">
+                          <div className="mb-1 table-cell" style={{ fontSize: '0.875rem' }}>
+                            <span className="ml-2 font-normal text-gray-500 align-middle">{node.address}</span>
+                            <ClipboardCopy value={node.address} />
+                          </div>
+                        </div>
                       )}
                     </dd>
                   </div>

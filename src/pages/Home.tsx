@@ -56,6 +56,7 @@ export default function Home(): ReactElement {
   const [isDownloading, setIsDownloading] = useState<boolean>(false)
   const [chunkExists, setChunkExists] = useState<boolean>(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [manifestUnsavedChanges, setManifestUnsavedChanges] = useState<boolean>(false)
 
   // 8f56d76a4c61980232f36bbeb37d908cad80c0184b0fbab2fd75035aed2bd3cf
   useEffect(() => {
@@ -128,6 +129,9 @@ export default function Home(): ReactElement {
 
   const handleManifestUpdate = (manifest: any) => {
     setManifest(_.cloneDeep(manifest))
+    setManifestUnsavedChanges(true)
+    // eslint-disable-next-line no-console
+    console.log(manifest)
   }
 
   return (
