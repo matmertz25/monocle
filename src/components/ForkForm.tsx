@@ -92,20 +92,18 @@ export default function ForkForm({
                       </button>
                     </div>
                   </div>
-                  {idx === attributes.length - 1 && (
-                    <div className="sm:col-span-6">
-                      <button
-                        onClick={() => setAttributes([...attributes, ['', '']])}
-                        type="button"
-                        className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                      >
-                        <PlusIcon className="h-4 w-4 mr-1" aria-hidden="true" />
-                        Add
-                      </button>
-                    </div>
-                  )}
                 </>
               ))}
+            <div className="sm:col-span-6 mb-3">
+              <button
+                onClick={() => setAttributes([...attributes, ['', '']])}
+                type="button"
+                className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <PlusIcon className="h-4 w-4 mr-1" aria-hidden="true" />
+                Add
+              </button>
+            </div>
 
             {isValueTypeNode(node.type) && (
               <div className="sm:col-span-6">
@@ -143,11 +141,11 @@ export default function ForkForm({
                 </div>
               </div>
             )}
-            <div className="sm:col-span-6">
+            <div className="sm:col-span-6 text-right">
               <button
                 onClick={() => (prefix ? handleToggleEdit(false) : handleToggleCreate(false))}
                 type="button"
-                className="mr-3 inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="mr-3 inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Cancel
               </button>
@@ -160,7 +158,7 @@ export default function ForkForm({
                   })
                 }
                 type="button"
-                className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Save
               </button>

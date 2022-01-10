@@ -124,13 +124,18 @@ export default function NodeCard({
                     <dt className="text-sm font-medium text-gray-600">Metadata</dt>
                     <div className="mt-5 border-t border-gray-200">
                       <dl className="sm:divide-y sm:divide-gray-200">
-                        {node?.attributes &&
+                        {node?.attributes && Object.entries(node.attributes).length > 0 ? (
                           Object.entries(node.attributes).map(([key, value]: [key: string, value: any]) => (
                             <div key={key} className="mt-1 py-2 sm:py-3 sm:grid sm:grid-cols-3 sm:gap-4">
                               <dt className="text-sm font-normal text-gray-500">{key}</dt>
                               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{value}</dd>
                             </div>
-                          ))}
+                          ))
+                        ) : (
+                          <div className="mt-1 py-2 sm:py-3 text-center">
+                            <dt className="text-sm font-normal text-gray-500">No Metadata</dt>
+                          </div>
+                        )}
                       </dl>
                     </div>
                   </div>
