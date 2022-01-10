@@ -91,7 +91,7 @@ export default function NodeCard({
                       {getNodeTypes(node.type).map(type => (
                         <span
                           key={type}
-                          className="mx-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
+                          className="mx-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
                         >
                           {type}
                         </span>
