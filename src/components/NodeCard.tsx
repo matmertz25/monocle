@@ -113,7 +113,7 @@ export default function NodeCard({
                       ) : (
                         <div className="table">
                           <div className="mb-1 table-cell" style={{ fontSize: '0.875rem' }}>
-                            <span className="ml-2 font-normal text-gray-500 align-middle">{node.address}</span>
+                            <span className="font-normal text-gray-500 align-middle">{node.address}</span>
                             <ClipboardCopy value={node.address} />
                           </div>
                         </div>
