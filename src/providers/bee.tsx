@@ -32,7 +32,7 @@ interface ContextInterface {
   getChunk: (hash: Reference | string) => Promise<Data>
   getDownloadLink: (hash: Reference | string) => string
   getFolderDownloadLink: (hash: Reference | string, path: string) => string
-  download: (hash: Reference | string, entries: Record<string, string>, metadata?: any) => Promise<void>
+  download: (hash: Reference | string, path: string, metadata?: any) => Promise<void>
 }
 
 const initialValues: ContextInterface = {
@@ -98,20 +98,22 @@ export function Provider({ children }: Props): ReactElement {
     return reference
   }
 
-  const download = async (hash: Reference | string, entries: Record<string, string>, metadata?: any) => {
+  const download = async (hash: Reference | string, path: string, metadata?: any) => {
     const hashIndex = hashToIndex(hash)
     const bee = getBee(hashIndex)
 
-    if (Object.keys(entries).length <= 1) {
-      window.open(getDownloadLink(hash), '_blank')
+    const zip = new JSZip()
+
+    if (path) {
+      zip.file(path, await bee.downloadData(hash))
     } else {
-      const zip = new JSZip()
-      for (const [path, hash] of Object.entries(entries)) {
-        zip.file(path, await bee.downloadData(hash))
-      }
-      const content = await zip.generateAsync({ type: 'blob' })
-      saveAs(content, metadata?.name + '.zip')
+      // for (const [path, hash] of Object.entries(entries)) {
+      //   zip.file(path, await bee.downloadData(hash))
+      // }
     }
+
+    const content = await zip.generateAsync({ type: 'blob' })
+    saveAs(content, metadata?.name + '.zip')
   }
 
   const getMetadata = async (
