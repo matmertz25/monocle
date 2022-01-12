@@ -170,7 +170,7 @@ export default function Graph({
           </div>
           <Tree
             data={data}
-            initialDepth={initialDepth}
+            // initialDepth={initialDepth}
             orientation={orientation}
             collapsible={true}
             zoomable={true}
