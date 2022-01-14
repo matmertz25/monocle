@@ -140,8 +140,15 @@ export default function Home(): ReactElement {
   }
 
   const handleManifestSave = async () => {
-    setManifestUnsavedChanges(false)
-    await manifest.save(saveFunction)
+    setIsLoading(true)
+    try {
+      await manifest.save(saveFunction)
+      setManifestUnsavedChanges(false)
+      setIsLoading(false)
+    } catch (e) {
+      setIsLoading(false)
+      setErrorMsg(JSON.stringify(e))
+    }
   }
 
   return (
@@ -184,7 +191,11 @@ export default function Home(): ReactElement {
                   </div>
                 ) : (
                   <div>
-                    {errorMsg && <ErrorAlert messages={[errorMsg]} />}
+                    {errorMsg && (
+                      <div className="mb-2">
+                        <ErrorAlert messages={[errorMsg]} />
+                      </div>
+                    )}
                     {data.children ? (
                       <>
                         <div className="table mb-2">
