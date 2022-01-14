@@ -1,7 +1,7 @@
 import { ReactElement, useContext, useEffect, useState } from 'react'
 import Graph from '../components/Graph'
 import MainLayout from '../layout/Main'
-import { bytesToHex, bytesToUtf8 } from '../utils/mantaray'
+import { bytesToHex, bytesToUtf8, saveFunction } from '../utils/mantaray'
 import { SearchIcon } from '@heroicons/react/solid'
 import NodeCard from '../components/NodeCard'
 import { MantarayNode } from 'mantaray-js'
@@ -11,6 +11,10 @@ import { Context } from '../providers/bee'
 import TreeNavigator from '../components/TreeNavigator'
 import { useSearchParams } from 'react-router-dom'
 import ErrorAlert from '../components/ErrorAlert'
+import { shortenHash } from '../utils'
+import ClipboardCopy from '../components/ClipboardCopy'
+import TreeEmpty from '../components/TreeEmpty'
+import { QuestionMarkCircleIcon } from '@heroicons/react/solid'
 
 const getLeaf = (key: string, node: any, prefix = ''): any => {
   const { contentAddress, entry, forks, metadata, obfuscationKey, type } = node.node
@@ -57,6 +61,7 @@ export default function Home(): ReactElement {
   const [chunkExists, setChunkExists] = useState<boolean>(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [manifestUnsavedChanges, setManifestUnsavedChanges] = useState<boolean>(false)
+  const [postageStamp, setPostageStamp] = useState<string>('')
 
   // 8f56d76a4c61980232f36bbeb37d908cad80c0184b0fbab2fd75035aed2bd3cf
   useEffect(() => {
@@ -134,6 +139,11 @@ export default function Home(): ReactElement {
     console.log(manifest)
   }
 
+  const handleManifestSave = async () => {
+    setManifestUnsavedChanges(false)
+    await manifest.save(saveFunction)
+  }
+
   return (
     <MainLayout>
       <>
@@ -175,7 +185,49 @@ export default function Home(): ReactElement {
                 ) : (
                   <div>
                     {errorMsg && <ErrorAlert messages={[errorMsg]} />}
-                    <TreeNavigator data={data} metadata={metadata} handleNodeClick={handleNodeClick} />
+                    {data.children ? (
+                      <>
+                        <div className="table mb-2">
+                          <div className="mb-1 table-cell" style={{ fontSize: '0.875rem' }}>
+                            <span className="text-gray-800 font-semibold align-middle">Manifest</span>
+                            <span className="ml-2 font-normal text-gray-500 align-middle">
+                              {shortenHash(metadata.hash)}
+                            </span>
+                            <ClipboardCopy value={metadata.hash} />
+                          </div>
+                        </div>
+                        <TreeNavigator data={data} handleNodeClick={handleNodeClick} />
+                        {manifestUnsavedChanges && (
+                          <div className="flex mt-4">
+                            <div className="relative rounded-md shadow-sm mr-1">
+                              <input
+                                type="text"
+                                name="account-number"
+                                id="account-number"
+                                className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-10 sm:text-sm border-gray-300 rounded-md"
+                                placeholder="postage stamp"
+                                onChange={e => setPostageStamp(e.target.value)}
+                              />
+                              <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <QuestionMarkCircleIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                              </div>
+                            </div>
+                            <div className="ml-1">
+                              <button
+                                onClick={handleManifestSave}
+                                type="button"
+                                disabled={!postageStamp}
+                                className={`disabled:opacity-75 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+                              >
+                                Save changes
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <TreeEmpty />
+                    )}
                   </div>
                 )}
               </div>

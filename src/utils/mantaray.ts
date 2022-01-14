@@ -81,7 +81,7 @@ export const utf8ToBytes = (value: string): Uint8Array => {
 }
 
 export const saveFunction = async (data: Uint8Array): Promise<Reference> => {
-  const hexRef = await bee.uploadData(process.env.BEE_POSTAGE || '', data)
+  const hexRef = await bee.uploadData(process.env.REACT_APP_BEE_POSTAGE || '', data)
 
   return hexToBytes(hexRef)
 }

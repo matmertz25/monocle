@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { PlusIcon, MinusIcon } from '@heroicons/react/solid'
 import { shortenHash } from '../utils'
 
@@ -15,6 +15,10 @@ export default function GraphNode(
 
     toggleNode(e)
   }
+
+  // if (nodeDatum?.children?.length > 0 && activeNode.path === nodeDatum.path) {
+  //   handeToggleNode({ nodeId: })
+  // }
 
   return (
     <React.Fragment>
