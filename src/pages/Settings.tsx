@@ -1,6 +1,10 @@
 import MainLayout from '../layout/Main'
+import { getBee } from '../providers/bee'
 
 export default function Settings() {
+  const bee = getBee()
+  const beeUrl = bee.url
+
   return (
     <MainLayout>
       <main className="max-w-lg mx-auto pt-10 pb-12 px-4 lg:pb-16">
@@ -23,7 +27,7 @@ export default function Settings() {
                   name="project-name"
                   id="project-name"
                   className="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"
-                  defaultValue="https://bee-1.gateway.ethswarm.org"
+                  defaultValue={beeUrl}
                   onChange={e => localStorage.setItem('beeUrl', e.target.value)}
                 />
               </div>

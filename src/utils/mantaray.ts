@@ -1,9 +1,7 @@
 import { initManifestNode, Utils as MantaUtils, Reference, NodeType } from 'mantaray-js'
-import { Bee, Utils } from '@ethersphere/bee-js'
-import { BEE_HOSTS } from '../constants'
+import { Utils } from '@ethersphere/bee-js'
+import { getBee } from '../providers/bee'
 
-const beeUrl = BEE_HOSTS[0]
-const bee = new Bee(beeUrl)
 export const createMantaray = (): any => {
   const node = initManifestNode()
   const address1 = MantaUtils.gen32Bytes() // instead of `gen32Bytes` some 32 bytes identifier that later could be retrieved from the storage
@@ -81,23 +79,32 @@ export const utf8ToBytes = (value: string): Uint8Array => {
 }
 
 export const saveFunction = async (data: Uint8Array): Promise<Reference> => {
+  const bee = getBee()
   const hexRef = await bee.uploadData(process.env.REACT_APP_BEE_POSTAGE || '', data)
 
   return hexToBytes(hexRef)
 }
 
 export const beeDownload = async (address: string): Promise<Uint8Array> => {
+  const bee = getBee()
+
   return await bee.downloadData(address)
 }
 
 export const beeDownloadFile = async (address: string, path: string): Promise<any> => {
+  const bee = getBee()
+
   return await bee.downloadFile(address, path)
 }
 
 export const removeFork = async (address: string): Promise<Uint8Array> => {
+  const bee = getBee()
+
   return await bee.downloadData(address)
 }
 
 export const loadFunction = async (address: any): Promise<Uint8Array> => {
+  const bee = getBee()
+
   return await bee.downloadData(bytesToHex(address))
 }

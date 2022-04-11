@@ -13,12 +13,20 @@ import { loadFunction } from '../utils/mantaray'
 
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
 
-const getBee = (hashIndex?: number): Bee => {
-  const localBeeUrl = localStorage.getItem('beeUrl')
-  const hostedBeeUrl = hashIndex ? BEE_HOSTS[hashIndex] : BEE_HOSTS[randomIndex]
-  const url = localBeeUrl || hostedBeeUrl
+export const getBee = (hashIndex?: number): Bee => {
+  const localBeeUrl = localStorage.getItem('beeUrl') || ''
 
-  return new Bee(url)
+  try {
+    new URL(localBeeUrl)
+
+    return new Bee(localBeeUrl)
+  } catch (e) {
+    console.log(e, 'invalid bee url')
+  }
+
+  const hostedBeeUrl = hashIndex ? BEE_HOSTS[hashIndex] : BEE_HOSTS[randomIndex]
+
+  return new Bee(hostedBeeUrl)
 }
 
 interface ContextInterface {
